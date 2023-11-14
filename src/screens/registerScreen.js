@@ -34,7 +34,7 @@ const RegisterScreen = ({ navigation }) => {
                     .doc(uid)
                     .set(data)
                     .then(() => {
-                        navigation.navigate('Home', { user: data })
+                        navigation.navigate('HomeTabs')
                     })
                     .catch((error) => {
                         alert(error)
