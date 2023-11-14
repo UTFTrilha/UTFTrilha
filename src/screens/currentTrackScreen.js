@@ -8,7 +8,7 @@ const CurrentTrackScreen = () => {
     return (
         <View style={styles.container}>
             <View style={styles.trackContainer}>
-                <Image source={require('../../assets/images/track.png')} style={styles.track}></Image>
+                <Image source={require('../../assets/images/trilha.png')} style={styles.track}></Image>
             </View>
         </View>
     )
@@ -24,8 +24,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly',
     },
     track: {
-        width: '85%',
-        height: '85%',
+        width: '80%',
+        height: '90%',
         borderRadius: 20,
         alignSelf: 'center',
     },
