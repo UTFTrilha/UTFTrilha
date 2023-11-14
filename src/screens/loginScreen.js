@@ -23,7 +23,6 @@ const LoginScreen = ({ navigation }) => {
                             return
                         }
                         const user = firestoreDocument.data()
-                        setUser(user)
                         navigation.navigate('HomeTabs')
                     })
                     .catch((error) => {
