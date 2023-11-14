@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import { View, StyleSheet, Image, TouchableOpacity, Modal, Text } from 'react-native'
+import { View, StyleSheet, Image, TouchableOpacity, Modal, Text, Alert } from 'react-native'
 
 import Icon from 'react-native-vector-icons/Feather'
 
 import Header from '../components/header'
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
     const [modalVisible, setModalVisible] = useState(false)
 
     const handleButtonPress = () => {
@@ -22,6 +22,22 @@ const HomeScreen = () => {
                 <Image source={require('../../assets/images/map.png')} style={styles.map}></Image>
                 <TouchableOpacity onPress={handleButtonPress} style={{ position: 'absolute' }}>
                     <Icon name='map-pin' size={60} color='#ff0000' style={styles.mapPinIcon}></Icon>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    onPress={() => {
+                        return Alert.alert(
+                            'Confirmação necessária',
+                            'Você realmente deseja deslogar?',
+                            [
+                                { text: 'Aceitar', onPress: () => navigation.navigate('Login') },
+                                { text: 'Cancelar' },
+                            ]
+                        )
+                    }}
+                    style={styles.logoutContainer}
+                >
+                    <Icon name={'log-out'} size={20} />
                 </TouchableOpacity>
             </View>
             <Modal
@@ -60,7 +76,8 @@ const styles = StyleSheet.create({
     },
     homeContainer: {
         flex: 1,
-        justifyContent: 'space-evenly',
+        paddingVertical: 16,
+        justifyContent: 'space-between',
     },
     mapPinIcon: {
         position: 'absolute',
@@ -68,9 +85,9 @@ const styles = StyleSheet.create({
         left: 200,
     },
     map: {
-        height: '85%',
-        width: '85%',
-        borderRadius: 20,
+        height: '90%',
+        width: '90%',
+        borderRadius: 10,
         alignSelf: 'center',
     },
     modalContainer: {
@@ -91,6 +108,16 @@ const styles = StyleSheet.create({
         fontSize: 25,
         color: 'white',
         alignSelf: 'center',
+    },
+    logoutContainer: {
+        width: '90%',
+        height: '7%',
+        borderRadius: 10,
+        alignSelf: 'center',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#948975',
+        flexDirection: 'row',
     },
 })
 
