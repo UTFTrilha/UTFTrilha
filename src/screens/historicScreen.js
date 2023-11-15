@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { View, StyleSheet, ScrollView, RefreshControl } from 'react-native'
 
-import Header from '../components/header'
 import HistoricList from '../components/historicList'
 
 import { firebase } from '../firebase/config'

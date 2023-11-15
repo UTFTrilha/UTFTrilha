@@ -18,14 +18,6 @@ import DetailScreen from './src/screens/detailScreen'
 const Tab = createBottomTabNavigator()
 const Stack = createNativeStackNavigator()
 
-function Header({ children }) {
-    return (
-        <View style={styles.header}>
-            <Text style={styles.title}>{children}</Text>
-        </View>
-    )
-}
-
 function HomeTabs() {
     function homeScreenTab(name, component, iconName) {
         return (

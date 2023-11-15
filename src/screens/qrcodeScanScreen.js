@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Text, View, StyleSheet, Button } from 'react-native'
 
-import Header from '../components/header'
 import { BarCodeScanner } from 'expo-barcode-scanner'
 
 const CameraScreen = () => {

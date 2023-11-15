@@ -3,8 +3,6 @@ import { View, StyleSheet, Image, TouchableOpacity, Modal, Text, Alert } from 'r
 
 import Icon from 'react-native-vector-icons/Feather'
 
-import Header from '../components/header'
-
 const HomeScreen = ({ navigation }) => {
     const [modalVisible, setModalVisible] = useState(false)
 

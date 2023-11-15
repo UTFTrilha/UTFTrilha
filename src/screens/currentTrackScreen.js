@@ -1,14 +1,14 @@
 import React from 'react'
 import { View, StyleSheet, Image } from 'react-native'
 
-import Header from '../components/header'
-
 const CurrentTrackScreen = () => {
-
     return (
         <View style={styles.container}>
             <View style={styles.trackContainer}>
-                <Image source={require('../../assets/images/trilha.png')} style={styles.track}></Image>
+                <Image
+                    source={require('../../assets/images/trilha.png')}
+                    style={styles.track}
+                ></Image>
             </View>
         </View>
     )
