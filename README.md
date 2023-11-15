@@ -9,6 +9,8 @@ Alunos:
 
 Entrega **3** - Persistência dos dados (valor 20%) - Entrega 14/11
 
-Arquivos de Configuração: `./src/firebase/config.js`
+Arquivo de configuração do firebase: `./src/firebase/config.js`
 
-Arquivo Json com a estrutura demonstrada a partir do cadastro de alguns itens: `./assets/collection_firebase.png`
+Print demonstrando estrtura do firestore: `./assets/collection_firebase.png`
+
+<img src="assets/collection_firebase.png"/>
