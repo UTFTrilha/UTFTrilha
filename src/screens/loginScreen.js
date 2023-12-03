@@ -23,7 +23,9 @@ const LoginScreen = ({ navigation }) => {
                             return
                         }
                         const user = firestoreDocument.data()
-                        navigation.navigate('HomeTabs')
+                        AsyncStorage.setItem('userId', user).then(() =>
+                            navigation.navigate('HomeTabs')
+                        )
                     })
                     .catch((error) => {
                         alert(error)

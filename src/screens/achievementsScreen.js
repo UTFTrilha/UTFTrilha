@@ -5,26 +5,22 @@ import AchievementList from '../components/achievementList'
 
 import { firebase } from '../firebase/config'
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const AchievementsScreen = () => {
     const [achievementItemList, setAchievementItemList] = useState([])
     const [refreshing, setRefreshing] = useState(false)
-    const [user, setUser] = useState()
 
     const getAchievementList = async () => {
-        const achievementsRef = firebase.firestore().collection('achievements').where
-        const achievementsSnapshot = await achievementsRef.get()
-        // #TODO - Alterar consulta pra fazer uso do id usuário logado
-
-
-
-
+        const achievementsRef = firebase.firestore().collection('achievements')
+        const userId = await AsyncStorage.getItem('userId');
+        const achievementsSnapshot = await achievementsRef.where('userIdList', 'array-contains', userId).get()
         let achievementItemListResult = []
         achievementsSnapshot.forEach((doc) => {
             achievementItemListResult.push(doc.data())
         })
         setAchievementItemList(achievementItemListResult)
     }
-
     const onRefresh = useCallback(() => {
         setRefreshing(true)
         setTimeout(() => {
