@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { View, StyleSheet, ScrollView, RefreshControl } from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 import HistoricList from '../components/historicList'
 
