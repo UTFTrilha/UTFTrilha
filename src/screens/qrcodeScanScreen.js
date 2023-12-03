@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Text, View, StyleSheet, Button } from 'react-native'
+import { doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { BarCodeScanner } from 'expo-barcode-scanner'
 
@@ -23,15 +25,18 @@ const CameraScreen = ({ navigation }) => {
         //console.log(qrCodeContentList);
         if (qrCodeContentList[0] == 'plant-qrcode') {
             alert(`QR Code escaneado!`)
-            const listaTeste = await firebase
+            const plantList = await firebase
                 .firestore()
                 .collection('plantItems')
                 .where('id', '==', qrCodeContentList[1])
                 .get()
             await setScanned(true)
-            //console.log(listaTeste.docs[0].data());
+            const plantRef = plantList.docs[0]
+            await updateDoc(plantRef, {
+                userIdList: arrayUnion(await AsyncStorage.getItem('userId'))
+            });
             navigation.navigate('Detail', {
-                item: listaTeste.docs[0]
+                item: plantList.docs[0]
                     .data(),
                 type: 'plant',
             })
@@ -42,8 +47,11 @@ const CameraScreen = ({ navigation }) => {
                 .collection('trailItems')
                 .where('id', '==', qrCodeContentList[1])
                 .get();
-             await setScanned(true)
-            //console.log(trailItem.docs);
+            await setScanned(true)
+            // const trailRef = plantList.docs[0]
+            // await updateDoc(plantRef, {
+            //     userIdList: arrayUnion(await AsyncStorage.getItem('userId'))
+            // });
             navigation.navigate('Detail', {
                 item: trailItem.docs[0]
                     .data(),

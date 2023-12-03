@@ -25,7 +25,7 @@ const LoginScreen = ({ navigation }) => {
                             return
                         }
                         const user = firestoreDocument.data()
-                        AsyncStorage.setItem('userId', user).then(() =>
+                        AsyncStorage.setItem('userId', user.id).then(() =>
                             navigation.navigate('HomeTabs')
                         )
                     })
