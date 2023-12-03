@@ -18,35 +18,41 @@ const CameraScreen = ({ navigation }) => {
     }, [])
 
     const handleBarCodeScanned = async ({ data }) => {
-        setScanned(true)
 
         const qrCodeContentList = data.split(':') // plant-qrcode:An63RIrg7Olji0XsrCfO
+        //console.log(qrCodeContentList);
         if (qrCodeContentList[0] == 'plant-qrcode') {
             alert(`QR Code escaneado!`)
+            const listaTeste = await firebase
+                .firestore()
+                .collection('plantItems')
+                .where('id', '==', qrCodeContentList[1])
+                .get()
+            await setScanned(true)
+            //console.log(listaTeste.docs[0].data());
             navigation.navigate('Detail', {
-                data: await firebase
-                    .firestore()
-                    .collection('plantItems')
-                    .where('id', '==', qrCodeContentList[1])
-                    .get()[0]
+                item: listaTeste.docs[0]
                     .data(),
                 type: 'plant',
             })
         } else if (qrCodeContentList[0] == 'trail-qrcode') {
             alert(`QR Code escaneado!`)
+            const trailItem = await firebase
+                .firestore()
+                .collection('trailItems')
+                .where('id', '==', qrCodeContentList[1])
+                .get();
+             await setScanned(true)
+            //console.log(trailItem.docs);
             navigation.navigate('Detail', {
-                data: await firebase
-                    .firestore()
-                    .collection('trailItems')
-                    .where('id', '==', qrCodeContentList[1])
-                    .get()[0]
+                item: trailItem.docs[0]
                     .data(),
                 type: 'trail',
             })
         }
-
         alert(`QR Code inválido!`)
     }
+
 
     if (hasPermission === null) {
         return (

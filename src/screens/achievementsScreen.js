@@ -11,10 +11,13 @@ const AchievementsScreen = () => {
     const [user, setUser] = useState()
 
     const getAchievementList = async () => {
-        const achievementsRef = firebase.firestore().collection('achievements')
+        const achievementsRef = firebase.firestore().collection('achievements').where
         const achievementsSnapshot = await achievementsRef.get()
         // #TODO - Alterar consulta pra fazer uso do id usuário logado
-        // const achievementsSnapshot = await achievementsRef.where('userId', '==', user.id).get()
+
+
+
+
         let achievementItemListResult = []
         achievementsSnapshot.forEach((doc) => {
             achievementItemListResult.push(doc.data())
