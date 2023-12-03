@@ -12,9 +12,8 @@ const HistoricScreen = ({ navigation }) => {
 
     const getTrailItemList = async () => {
         const trailItemsRef = firebase.firestore().collection('trailItems')
-        const trailItemsSnapshot = await trailItemsRef.get()
-        // #TODO - Alterar consulta pra fazer uso do id usuário logado
-        // const trailItemsSnapshot = await trailItemsRef.where('userId', '==', user.id).get()
+        const userId = await AsyncStorage.getItem('userId');
+        const trailItemsSnapshot = await trailItemsRef.where('userIdList', 'array-contains', userId).get()
         let trailItemListResult = []
         trailItemsSnapshot.forEach((doc) => {
             trailItemListResult.push(doc.data())
@@ -23,9 +22,8 @@ const HistoricScreen = ({ navigation }) => {
     }
     const getPlantItemList = async () => {
         const plantItemsRef = firebase.firestore().collection('plantItems')
-        const plantItemsSnapshot = await plantItemsRef.get()
-        // #TODO - Alterar consulta pra fazer uso do id usuário logado
-        // const plantItemsSnapshot = await plantItemsRef.where('userId', '==', user.id).get()
+        const userId = await AsyncStorage.getItem('userId');
+        const plantItemsSnapshot = await plantItemsRef.where('userIdList', 'array-contains', userId).get()
         let plantItemListResult = []
         plantItemsSnapshot.forEach((doc) => {
             plantItemListResult.push(doc.data())
