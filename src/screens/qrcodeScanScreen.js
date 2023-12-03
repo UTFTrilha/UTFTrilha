@@ -31,7 +31,8 @@ const CameraScreen = ({ navigation }) => {
                 .where('id', '==', qrCodeContentList[1])
                 .get()
             await setScanned(true)
-            const plantRef = plantList.docs[0]
+            const db = firebase.firestore();
+            const plantRef = doc(db, "plantItems", plantList.docs[0].data().id);
             await updateDoc(plantRef, {
                 userIdList: arrayUnion(await AsyncStorage.getItem('userId'))
             });
