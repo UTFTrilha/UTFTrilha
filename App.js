@@ -52,7 +52,8 @@ function HomeTabs() {
                 },
             }}
         >
-            {homeScreenTab('Trilha Ativa', CurrentTrackScreen, 'navigation')}
+            {/* Essa feature está comentada pois necessida certão de crédito para funcionar */}
+            {/* {homeScreenTab('Trilha Ativa', CurrentTrackScreen, 'navigation')} */}
             {homeScreenTab('Conquistas', AchievementsScreen, 'award')}
             {homeScreenTab('Home', HomeScreen, 'home')}
             {homeScreenTab('Camera', CameraScreen, 'camera')}

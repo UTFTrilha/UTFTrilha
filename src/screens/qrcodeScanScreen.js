@@ -3,7 +3,9 @@ import { Text, View, StyleSheet, Button } from 'react-native'
 
 import { BarCodeScanner } from 'expo-barcode-scanner'
 
-const CameraScreen = () => {
+import { firebase } from '../firebase/config'
+
+const CameraScreen = ({ navigation }) => {
     const [hasPermission, setHasPermission] = useState(null)
     const [scanned, setScanned] = useState(false)
 
@@ -15,9 +17,35 @@ const CameraScreen = () => {
         getBarCodeScannerPermissions()
     }, [])
 
-    const handleBarCodeScanned = ({ type, data }) => {
+    const handleBarCodeScanned = async ({ data }) => {
         setScanned(true)
-        alert(`QR Code escaneado!`)
+
+        const qrCodeContentList = data.split(':') // plant-qrcode:An63RIrg7Olji0XsrCfO
+        if (qrCodeContentList[0] == 'plant-qrcode') {
+            alert(`QR Code escaneado!`)
+            navigation.navigate('Detail', {
+                data: await firebase
+                    .firestore()
+                    .collection('plantItems')
+                    .where('id', '==', qrCodeContentList[1])
+                    .get()[0]
+                    .data(),
+                type: 'plant',
+            })
+        } else if (qrCodeContentList[0] == 'trail-qrcode') {
+            alert(`QR Code escaneado!`)
+            navigation.navigate('Detail', {
+                data: await firebase
+                    .firestore()
+                    .collection('trailItems')
+                    .where('id', '==', qrCodeContentList[1])
+                    .get()[0]
+                    .data(),
+                type: 'trail',
+            })
+        }
+
+        alert(`QR Code inválido!`)
     }
 
     if (hasPermission === null) {
