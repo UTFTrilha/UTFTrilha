@@ -21,8 +21,15 @@ const CameraScreen = ({ navigation }) => {
 
     const handleBarCodeScanned = async ({ data }) => {
 
+        const db = firebase.firestore();
+        const userId = await AsyncStorage.getItem('userId');
+
         const qrCodeContentList = data.split(':') // plant-qrcode:An63RIrg7Olji0XsrCfO
         //console.log(qrCodeContentList);
+        const achievementRef = doc(db, "achievements", "9cQgGfy1J5dHAwQilH4X");
+        await updateDoc(achievementRef, {
+            userIdList: arrayUnion(userId)
+        });
         if (qrCodeContentList[0] == 'plant-qrcode') {
             alert(`QR Code escaneado!`)
             const plantList = await firebase
@@ -31,10 +38,13 @@ const CameraScreen = ({ navigation }) => {
                 .where('id', '==', qrCodeContentList[1])
                 .get()
             await setScanned(true)
-            const db = firebase.firestore();
             const plantRef = doc(db, "plantItems", plantList.docs[0].data().id);
             await updateDoc(plantRef, {
-                userIdList: arrayUnion(await AsyncStorage.getItem('userId'))
+                userIdList: arrayUnion(userId)
+            });
+            const achievementRef = doc(db, "achievements", "Y7caqexrvmDyycJUBXzy");
+            await updateDoc(achievementRef, {
+                userIdList: arrayUnion(userId)
             });
             navigation.navigate('Detail', {
                 item: plantList.docs[0]
@@ -49,10 +59,14 @@ const CameraScreen = ({ navigation }) => {
                 .where('id', '==', qrCodeContentList[1])
                 .get();
             await setScanned(true)
-            // const trailRef = plantList.docs[0]
-            // await updateDoc(plantRef, {
-            //     userIdList: arrayUnion(await AsyncStorage.getItem('userId'))
-            // });
+            const trailRef = doc(db, "trailItems", trailItem.docs[0].data().id);
+            await updateDoc(trailRef, {
+                userIdList: arrayUnion(userId)
+            });
+            const achievementRef = doc(db, "achievements", "qB67KL4I02NJ9uTDPEMX");
+            await updateDoc(achievementRef, {
+                userIdList: arrayUnion(userId)
+            });
             navigation.navigate('Detail', {
                 item: trailItem.docs[0]
                     .data(),
