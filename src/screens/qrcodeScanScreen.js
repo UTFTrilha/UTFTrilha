@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Text, View, StyleSheet, Button } from 'react-native'
-import { doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { doc, updateDoc, arrayUnion } from 'firebase/firestore'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { BarCodeScanner } from 'expo-barcode-scanner'
 
@@ -20,16 +20,14 @@ const CameraScreen = ({ navigation }) => {
     }, [])
 
     const handleBarCodeScanned = async ({ data }) => {
+        const db = firebase.firestore()
+        const userId = await AsyncStorage.getItem('userId')
 
-        const db = firebase.firestore();
-        const userId = await AsyncStorage.getItem('userId');
-
-        const qrCodeContentList = data.split(':') // plant-qrcode:An63RIrg7Olji0XsrCfO
-        //console.log(qrCodeContentList);
-        const achievementRef = doc(db, "achievements", "9cQgGfy1J5dHAwQilH4X");
+        const qrCodeContentList = data.split(':')
+        const achievementRef = doc(db, 'achievements', '9cQgGfy1J5dHAwQilH4X')
         await updateDoc(achievementRef, {
-            userIdList: arrayUnion(userId)
-        });
+            userIdList: arrayUnion(userId),
+        })
         if (qrCodeContentList[0] == 'plant-qrcode') {
             alert(`QR Code escaneado!`)
             const plantList = await firebase
@@ -38,17 +36,16 @@ const CameraScreen = ({ navigation }) => {
                 .where('id', '==', qrCodeContentList[1])
                 .get()
             await setScanned(true)
-            const plantRef = doc(db, "plantItems", plantList.docs[0].data().id);
+            const plantRef = doc(db, 'plantItems', plantList.docs[0].data().id)
             await updateDoc(plantRef, {
-                userIdList: arrayUnion(userId)
-            });
-            const achievementRef = doc(db, "achievements", "Y7caqexrvmDyycJUBXzy");
+                userIdList: arrayUnion(userId),
+            })
+            const achievementRef = doc(db, 'achievements', 'Y7caqexrvmDyycJUBXzy')
             await updateDoc(achievementRef, {
-                userIdList: arrayUnion(userId)
-            });
+                userIdList: arrayUnion(userId),
+            })
             navigation.navigate('Detail', {
-                item: plantList.docs[0]
-                    .data(),
+                item: plantList.docs[0].data(),
                 type: 'plant',
             })
         } else if (qrCodeContentList[0] == 'trail-qrcode') {
@@ -57,25 +54,23 @@ const CameraScreen = ({ navigation }) => {
                 .firestore()
                 .collection('trailItems')
                 .where('id', '==', qrCodeContentList[1])
-                .get();
+                .get()
             await setScanned(true)
-            const trailRef = doc(db, "trailItems", trailItem.docs[0].data().id);
+            const trailRef = doc(db, 'trailItems', trailItem.docs[0].data().id)
             await updateDoc(trailRef, {
-                userIdList: arrayUnion(userId)
-            });
-            const achievementRef = doc(db, "achievements", "qB67KL4I02NJ9uTDPEMX");
+                userIdList: arrayUnion(userId),
+            })
+            const achievementRef = doc(db, 'achievements', 'qB67KL4I02NJ9uTDPEMX')
             await updateDoc(achievementRef, {
-                userIdList: arrayUnion(userId)
-            });
+                userIdList: arrayUnion(userId),
+            })
             navigation.navigate('Detail', {
-                item: trailItem.docs[0]
-                    .data(),
+                item: trailItem.docs[0].data(),
                 type: 'trail',
             })
         }
         alert(`QR Code inválido!`)
     }
-
 
     if (hasPermission === null) {
         return (

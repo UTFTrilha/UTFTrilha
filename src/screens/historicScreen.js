@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { View, StyleSheet, ScrollView, RefreshControl } from 'react-native'
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import HistoricList from '../components/historicList'
 
@@ -14,8 +13,10 @@ const HistoricScreen = ({ navigation }) => {
 
     const getTrailItemList = async () => {
         const trailItemsRef = firebase.firestore().collection('trailItems')
-        const userId = await AsyncStorage.getItem('userId');
-        const trailItemsSnapshot = await trailItemsRef.where('userIdList', 'array-contains', userId).get()
+        const userId = await AsyncStorage.getItem('userId')
+        const trailItemsSnapshot = await trailItemsRef
+            .where('userIdList', 'array-contains', userId)
+            .get()
         let trailItemListResult = []
         trailItemsSnapshot.forEach((doc) => {
             trailItemListResult.push(doc.data())
@@ -24,8 +25,10 @@ const HistoricScreen = ({ navigation }) => {
     }
     const getPlantItemList = async () => {
         const plantItemsRef = firebase.firestore().collection('plantItems')
-        const userId = await AsyncStorage.getItem('userId');
-        const plantItemsSnapshot = await plantItemsRef.where('userIdList', 'array-contains', userId).get()
+        const userId = await AsyncStorage.getItem('userId')
+        const plantItemsSnapshot = await plantItemsRef
+            .where('userIdList', 'array-contains', userId)
+            .get()
         let plantItemListResult = []
         plantItemsSnapshot.forEach((doc) => {
             plantItemListResult.push(doc.data())

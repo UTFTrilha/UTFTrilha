@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { View, StyleSheet, ScrollView, RefreshControl } from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import AchievementList from '../components/achievementList'
 
 import { firebase } from '../firebase/config'
-
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AchievementsScreen = () => {
     const [achievementItemList, setAchievementItemList] = useState([])
@@ -13,8 +12,10 @@ const AchievementsScreen = () => {
 
     const getAchievementList = async () => {
         const achievementsRef = firebase.firestore().collection('achievements')
-        const userId = await AsyncStorage.getItem('userId');
-        const achievementsSnapshot = await achievementsRef.where('userIdList', 'array-contains', userId).get()
+        const userId = await AsyncStorage.getItem('userId')
+        const achievementsSnapshot = await achievementsRef
+            .where('userIdList', 'array-contains', userId)
+            .get()
         let achievementItemListResult = []
         achievementsSnapshot.forEach((doc) => {
             achievementItemListResult.push(doc.data())

@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
@@ -9,7 +9,7 @@ import Icon from 'react-native-vector-icons/Feather'
 import LoginScreen from './src/screens/loginScreen'
 import RegisterScreen from './src/screens/registerScreen'
 import HomeScreen from './src/screens/homeScreen'
-import CurrentTrackScreen from './src/screens/currentTrackScreen'
+// import CurrentTrackScreen from './src/screens/currentTrackScreen'
 import AchievementsScreen from './src/screens/achievementsScreen'
 import CameraScreen from './src/screens/qrcodeScanScreen'
 import HistoricScreen from './src/screens/historicScreen'
@@ -52,7 +52,7 @@ function HomeTabs() {
                 },
             }}
         >
-            {/* Essa feature está comentada pois necessida certão de crédito para funcionar */}
+            {/* Decidimos deixar a feature do mapa em stand by, devido a necessidade de atrelar um cartão de crédito a api key que iríamos utilizar... */}
             {/* {homeScreenTab('Trilha Ativa', CurrentTrackScreen, 'navigation')} */}
             {homeScreenTab('Conquistas', AchievementsScreen, 'award')}
             {homeScreenTab('Home', HomeScreen, 'home')}
