@@ -43,6 +43,7 @@ const HomeScreen = ({ navigation }) => {
                     trailItemList.length > 0 ? (
                         trailItemList.map((trail) => (
                             <TouchableOpacity
+                                key={trail.id}
                                 onPress={() => handleButtonPress(trail)}
                                 style={{ position: 'absolute' }}
                             >
