@@ -1,27 +1,69 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, StyleSheet, Image, TouchableOpacity, Modal, Text, Alert } from 'react-native'
 
 import Icon from 'react-native-vector-icons/Feather'
 
-const HomeScreen = ({ navigation }) => {
-    const [modalVisible, setModalVisible] = useState(false)
+import { firebase } from '../firebase/config'
 
-    const handleButtonPress = () => {
+const HomeScreen = ({ navigation }) => {
+    const [loading, setLoading] = useState(true)
+    const [trailItemList, setTrailItemList] = useState([])
+    const [modalVisible, setModalVisible] = useState(false)
+    const [selectedTrail, setSelectedTrail] = useState({})
+
+    const getTrailItemList = async () => {
+        const trailItemsRef = firebase.firestore().collection('trailItems')
+        const trailItemsSnapshot = await trailItemsRef.get()
+        let trailItemListResult = []
+        trailItemsSnapshot.forEach((doc) => {
+            trailItemListResult.push(doc.data())
+        })
+        setTrailItemList(trailItemListResult)
+        setLoading(false)
+    }
+
+    const handleButtonPress = (trail) => {
         setModalVisible(true)
+        setSelectedTrail(trail)
     }
 
     const closeModal = () => {
         setModalVisible(false)
     }
 
+    useEffect(() => {
+        getTrailItemList()
+    }, [])
+
     return (
         <View style={styles.container}>
             <View style={styles.homeContainer}>
                 <Image source={require('../../assets/images/map.png')} style={styles.map}></Image>
-                <TouchableOpacity onPress={handleButtonPress} style={{ position: 'absolute' }}>
-                    <Icon name='map-pin' size={60} color='#ff0000' style={styles.mapPinIcon}></Icon>
-                </TouchableOpacity>
-
+                {!loading ? (
+                    trailItemList.length > 0 ? (
+                        trailItemList.map((trail) => (
+                            <TouchableOpacity
+                                onPress={() => handleButtonPress(trail)}
+                                style={{ position: 'absolute' }}
+                            >
+                                <Icon
+                                    name='map-pin'
+                                    size={60}
+                                    color='#ff0000'
+                                    style={{
+                                        position: 'absolute',
+                                        top: trail.posY,
+                                        left: trail.posX,
+                                    }}
+                                ></Icon>
+                            </TouchableOpacity>
+                        ))
+                    ) : (
+                        <View style={styles.defaultMessageView}>
+                            <Text>Nenhuma trilha encontrada</Text>
+                        </View>
+                    )
+                ) : null}
                 <TouchableOpacity
                     onPress={() => {
                         return Alert.alert(
@@ -46,17 +88,19 @@ const HomeScreen = ({ navigation }) => {
                 style={styles.modalContent}
             >
                 <View style={styles.modalContainer}>
-                    <Text style={styles.textMapPinDetails}>
-                        Informações sobre a trilha selecionada
-                    </Text>
+                    <Text style={styles.textMapPinDetails}>{selectedTrail.mainText}</Text>
                     <View
                         style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 10 }}
                     >
-                        <Icon name='star' size={40} color='#FFBF00' style={styles.starIcon}></Icon>
-                        <Icon name='star' size={40} color='#FFBF00' style={styles.starIcon}></Icon>
-                        <Icon name='star' size={40} color='#FFBF00' style={styles.starIcon}></Icon>
-                        <Icon name='star' size={40} color='#FFBF00' style={styles.starIcon}></Icon>
-                        <Icon name='star' size={40} color='#FFBF00' style={styles.starIcon}></Icon>
+                        {[...Array(selectedTrail.rating)].map((_, i) => (
+                            <Icon
+                                key={i}
+                                name='star'
+                                size={40}
+                                color='#FFBF00'
+                                style={styles.starIcon}
+                            />
+                        ))}
                     </View>
                     <TouchableOpacity onPress={closeModal}>
                         <Text style={{ color: 'white', fontSize: 20 }}>Fechar</Text>
@@ -76,11 +120,6 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingVertical: 16,
         justifyContent: 'space-between',
-    },
-    mapPinIcon: {
-        position: 'absolute',
-        top: 310,
-        left: 200,
     },
     map: {
         height: '90%',
@@ -116,6 +155,18 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: '#948975',
         flexDirection: 'row',
+    },
+    defaultMessageView: {
+        position: 'absolute',
+        top: '45%',
+        left: '25%',
+        width: '50%',
+        height: '7%',
+        borderRadius: 10,
+        borderWidth: 0.5,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#FEECCD',
     },
 })
 
