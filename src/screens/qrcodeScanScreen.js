@@ -20,6 +20,8 @@ const CameraScreen = ({ navigation }) => {
     }, [])
 
     const handleBarCodeScanned = async ({ data }) => {
+        setScanned(true)
+
         const db = firebase.firestore()
         const userId = await AsyncStorage.getItem('userId')
 
@@ -35,7 +37,6 @@ const CameraScreen = ({ navigation }) => {
                 .collection('plantItems')
                 .where('id', '==', qrCodeContentList[1])
                 .get()
-            await setScanned(true)
             const plantRef = doc(db, 'plantItems', plantList.docs[0].data().id)
             await updateDoc(plantRef, {
                 userIdList: arrayUnion(userId),
@@ -44,10 +45,12 @@ const CameraScreen = ({ navigation }) => {
             await updateDoc(achievementRef, {
                 userIdList: arrayUnion(userId),
             })
+            setScanned(true)
             navigation.navigate('Detail', {
                 item: plantList.docs[0].data(),
                 type: 'plant',
             })
+            return
         } else if (qrCodeContentList[0] == 'trail-qrcode') {
             alert(`QR Code escaneado!`)
             const trailItem = await firebase
@@ -55,7 +58,6 @@ const CameraScreen = ({ navigation }) => {
                 .collection('trailItems')
                 .where('id', '==', qrCodeContentList[1])
                 .get()
-            await setScanned(true)
             const trailRef = doc(db, 'trailItems', trailItem.docs[0].data().id)
             await updateDoc(trailRef, {
                 userIdList: arrayUnion(userId),
@@ -64,11 +66,14 @@ const CameraScreen = ({ navigation }) => {
             await updateDoc(achievementRef, {
                 userIdList: arrayUnion(userId),
             })
+            setScanned(true)
             navigation.navigate('Detail', {
                 item: trailItem.docs[0].data(),
                 type: 'trail',
             })
+            return
         }
+
         alert(`QR Code inválido!`)
     }
 
@@ -93,10 +98,12 @@ const CameraScreen = ({ navigation }) => {
                 style={styles.barCodeScanner}
             />
             {scanned && (
-                <Button
-                    title={'Clique para escanear novamente'}
-                    onPress={() => setScanned(false)}
-                />
+                <View style={styles.rescanButtonView}>
+                    <Button
+                        title={'Clique para escanear novamente'}
+                        onPress={() => setScanned(false)}
+                    ></Button>
+                </View>
             )}
         </View>
     )
@@ -111,6 +118,15 @@ const styles = StyleSheet.create({
     barCodeScanner: {
         width: '100%',
         height: '100%',
+    },
+    rescanButtonView: {
+        zIndex: 1,
+        marginTop: -56,
+        width: '90%',
+        height: '7%',
+        borderRadius: 10,
+        alignSelf: 'center',
+        backgroundColor: '#CDC773',
     },
 })
 
