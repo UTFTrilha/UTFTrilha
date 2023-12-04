@@ -45,7 +45,6 @@ const CameraScreen = ({ navigation }) => {
             await updateDoc(achievementRef, {
                 userIdList: arrayUnion(userId),
             })
-            setScanned(true)
             navigation.navigate('Detail', {
                 item: plantList.docs[0].data(),
                 type: 'plant',
@@ -66,7 +65,6 @@ const CameraScreen = ({ navigation }) => {
             await updateDoc(achievementRef, {
                 userIdList: arrayUnion(userId),
             })
-            setScanned(true)
             navigation.navigate('Detail', {
                 item: trailItem.docs[0].data(),
                 type: 'trail',
